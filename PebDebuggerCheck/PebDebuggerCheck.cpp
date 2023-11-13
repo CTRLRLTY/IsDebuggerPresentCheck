@@ -104,8 +104,19 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         // Draw the text
         TextOutW(hdc, x, y, text, length);
 
+        // Set up the watermark text
+        LPCWSTR watermarkText = L"Made By CTRLRLTY";
+        SetTextColor(hdc, RGB(128, 128, 128)); // Grey text for the watermark
+        SetBkMode(hdc, TRANSPARENT);
+
+        // Draw the watermark at the bottom-right corner
+        SIZE watermarkSize;
+        GetTextExtentPoint32W(hdc, watermarkText, lstrlenW(watermarkText), &watermarkSize);
+        TextOutW(hdc, rect.right - watermarkSize.cx - 10, rect.bottom - watermarkSize.cy - 10, watermarkText, lstrlenW(watermarkText));
+
         EndPaint(hwnd, &ps);
     }
+    return 0;
 
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
